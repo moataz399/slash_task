@@ -19,20 +19,20 @@ class _ApiService implements ApiService {
   String? baseUrl;
 
   @override
-  Future<List<ProductModelResponse>> getProducts() async {
+  Future<ProductResponse> getProducts() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<List<dynamic>>(
-        _setStreamType<List<ProductModelResponse>>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ProductResponse>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              'https://slash-backend.onrender.com/product/?limit=3&page=1',
+              'https://slash-backend.onrender.com/product/?limit=6&page=2',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -41,10 +41,7 @@ class _ApiService implements ApiService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    var value = _result.data!
-        .map((dynamic i) =>
-            ProductModelResponse.fromJson(i as Map<String, dynamic>))
-        .toList();
+    final value = ProductResponse.fromJson(_result.data!);
     return value;
   }
 

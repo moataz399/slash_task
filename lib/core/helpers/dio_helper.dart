@@ -6,7 +6,7 @@ class DioHelper {
   static init() {
     dio = Dio(
       BaseOptions(
-        baseUrl: "https://slash-backend.onrender.com/product/?limit=3&page=1",
+        baseUrl: "https://slash-backend.onrender.com/product/?limit=6&page=2",
         receiveDataWhenStatusError: true,
         receiveTimeout: const Duration(
           seconds: 20 * 100,

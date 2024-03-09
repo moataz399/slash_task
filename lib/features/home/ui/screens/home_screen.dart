@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:slash/core/helpers/app_loaders.dart';
 import 'package:slash/features/home/logic/home_cubit.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -14,13 +13,25 @@ class HomeScreen extends StatelessWidget {
           if (state is ProductsLoadingState) {
             return Center(child: CircularProgressIndicator());
           } else if (state is ProductsSuccessState) {
-            return Text(
-              context.read<HomeCubit>().productsList.length.toString()??"zo]]]",
+            return Column(
+              children: [
+                Center(
+                  child: Text(
+                    context.read<HomeCubit>().productsList.length.toString(),
+                  ),
+                ),  Center(
+                  child: Text(
+                    state.list.length.toString(),
+                  ),
+                ),
+              ],
             );
           } else {
-            return InkWell(onTap: (){
-              context.read<HomeCubit>().getProducts();
-            },child: Center(child: Text("no data available")));
+            return InkWell(
+                onTap: () {
+                  context.read<HomeCubit>().getProducts();
+                },
+                child: Center(child: Text("no data available")));
           }
         },
       ),

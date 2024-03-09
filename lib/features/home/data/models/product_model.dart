@@ -1,133 +1,111 @@
-class ProductModelResponse {
-  final int statusCode;
-  final String message;
-  final Pagination pagination;
-  final List<Product> data;
-
-  ProductModelResponse({
-    required this.statusCode,
-    required this.message,
-    required this.pagination,
-    required this.data,
-  });
-
-  factory ProductModelResponse.fromJson(Map<String, dynamic> json) {
-    return ProductModelResponse(
-      statusCode: json['statusCode'],
-      message: json['message'],
-      pagination: Pagination.fromJson(json['pagination']),
-      data: List<Product>.from(json['data'].map((x) => Product.fromJson(x))),
-    );
-  }
-}
-
-class Pagination {
-  int pages;
-  int limit;
-
-  Pagination({
-    required this.pages,
-    required this.limit,
-  });
-
-  factory Pagination.fromJson(Map<String, dynamic> json) {
-    return Pagination(
-      pages: json['pages'],
-      limit: json['limit'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'pages': pages,
-      'limit': limit,
-    };
-  }
-}
-
-class Product {
-  final int id;
-  final String name;
-  final String description;
-
-  final List<ProductVariation>? productVariations;
-
-  Product({
-    required this.id,
-    required this.name,
-    required this.description,
-    this.productVariations,
-  });
-
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
-      id: json['id'],
-      name: json['name'],
-      description: json['description'],
-      productVariations: List<ProductVariation>.from(
-          json['ProductVariations'].map((x) => ProductVariation.fromJson(x))),
-      // Parse and initialize other fields
-    );
-  }
-}
-
-class ProductVariation {
-  final int id;
-  final int productId;
-  final double price;
-  final int quantity;
-  final bool isDefault;
-  final List<ProductVariantImage>? productVariantImages;
-
-  ProductVariation({
-    required this.id,
-    required this.productId,
-    required this.price,
-    required this.quantity,
-    required this.isDefault,
-    required this.productVariantImages,
-  });
-
-  factory ProductVariation.fromJson(Map<String, dynamic> json) {
-    return ProductVariation(
-      id: json['id'],
-      productId: json['product_id'],
-      price: json['price'].toDouble(),
-      quantity: json['quantity'],
-      isDefault: json['is_default'],
-      productVariantImages: List<ProductVariantImage>.from(
-        json['ProductVarientImages']
-            .map((x) => ProductVariantImage.fromJson(x)),
-      ),
-    );
-  }
-
-}
-
-class ProductVariantImage {
-  final int? id;
-  final String? imagePath;
-  final int? productVariantId;
-
-  ProductVariantImage({
-     this.id,
-     this.imagePath,
-     this.productVariantId,
-  });
-
-  factory ProductVariantImage.fromJson(Map<String, dynamic> json) {
-    return ProductVariantImage(
-      id: json['id'],
-      imagePath: json['image_path'],
-      productVariantId: json['product_varient_id'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'image_path': imagePath,
-      'product_varient_id': productVariantId,
-    };
-  }
-}
+// import 'package:json_annotation/json_annotation.dart';
+//
+// part 'product_model.g.dart';
+//
+// @JsonSerializable(explicitToJson: true)
+// class ProductResponse {
+//   final int statusCode;
+//   final String message;
+//
+//   @JsonKey(nullable: true)
+//   final Pagination pagination;
+//
+//   @JsonKey(nullable: true)
+//   final List<Product> data;
+//
+//   ProductResponse({
+//     required this.statusCode,
+//     required this.message,
+//     required this.pagination,
+//     required this.data,
+//   });
+//
+//   factory ProductResponse.fromJson(Map<String, dynamic> json) =>
+//       _$ProductResponseFromJson(json);
+//
+//   Map<String, dynamic> toJson() => _$ProductResponseToJson(this);
+// }
+//
+// @JsonSerializable(explicitToJson: true)
+// class Pagination {
+//   final int pages;
+//   final int limit;
+//
+//   Pagination({
+//     required this.pages,
+//     required this.limit,
+//   });
+//
+//   factory Pagination.fromJson(Map<String, dynamic> json) =>
+//       _$PaginationFromJson(json);
+//
+//   Map<String, dynamic> toJson() => _$PaginationToJson(this);
+// }
+//
+// @JsonSerializable(explicitToJson: true)
+// class Product {
+//   final int id;
+//   final String name;
+//   final String type;
+//   final String description;
+//
+//   @JsonKey(nullable: true)
+//   final List<ProductVariations> productVariations;
+//
+//   Product({
+//     required this.id,
+//     required this.name,
+//     required this.type,
+//     required this.description,
+//     required this.productVariations,
+//   });
+//
+//   factory Product.fromJson(Map<String, dynamic> json) =>
+//       _$ProductFromJson(json);
+//
+//   Map<String, dynamic> toJson() => _$ProductToJson(this);
+// }
+//
+// @JsonSerializable(explicitToJson: true)
+// class ProductVariations {
+//   final int id;
+//   final int productId;
+//   final double price;
+//   final int quantity;
+//   final bool isDefault;
+//
+//   @JsonKey(nullable: true)
+//   final List<ProductVarientImages> productVarientImages;
+//
+//   ProductVariations({
+//     required this.id,
+//     required this.productId,
+//     required this.price,
+//     required this.quantity,
+//     required this.isDefault,
+//     required this.productVarientImages,
+//   });
+//
+//   factory ProductVariations.fromJson(Map<String, dynamic> json) =>
+//       _$ProductVariationsFromJson(json);
+//
+//   Map<String, dynamic> toJson() => _$ProductVariationsToJson(this);
+// }
+//
+// @JsonSerializable(explicitToJson: true)
+// class ProductVarientImages {
+//   final int id;
+//   final String image;
+//   final int productVarientId;
+//
+//   ProductVarientImages({
+//     required this.id,
+//     required this.image,
+//     required this.productVarientId,
+//   });
+//
+//   factory ProductVarientImages.fromJson(Map<String, dynamic> json) =>
+//       _$ProductVarientImagesFromJson(json);
+//
+//   Map<String, dynamic> toJson() => _$ProductVarientImagesToJson(this);
+// }
