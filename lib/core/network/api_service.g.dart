@@ -32,7 +32,7 @@ class _ApiService implements ApiService {
     )
             .compose(
               _dio.options,
-              'https://slash-backend.onrender.com/product/?limit=6&page=2',
+              'https://slash-backend.onrender.com/product/?limit=20&page=1',
               queryParameters: queryParameters,
               data: _data,
             )

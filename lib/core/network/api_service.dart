@@ -8,6 +8,6 @@ part 'api_service.g.dart';
 abstract class ApiService {
   factory ApiService(Dio dio, {String baseUrl}) = _ApiService;
 
-  @GET("https://slash-backend.onrender.com/product/?limit=6&page=2")
+  @GET("https://slash-backend.onrender.com/product/?limit=20&page=1")
   Future<ProductResponse> getProducts();
 }

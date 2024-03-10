@@ -21,67 +21,54 @@ class Product {
 
   final String description;
 
+  @JsonKey(name: "ProductVariations")
+  final List<ProductVariations>? productVariations;
+
   Product({
     required this.id,
     required this.name,
     required this.description,
+    this.productVariations,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) =>
       _$ProductFromJson(json);
 }
 
-// @JsonSerializable()
-// class ProductVariations {
-//   final int id;
-//   final int productId;
-//   final double price;
-//   final int quantity;
-//   final int? warehouseId;
-//   final bool isDefault;
-//   final String? deletedAt;
-//   final String createdAt;
-//   final String updatedAt;
-//   final int productVariationStatusId;
-//   final String? acceptedBy;
-//
-//   final List<ProductVarientImages> productVarientImages;
-//
-//   ProductVariations({
-//     required this.id,
-//     required this.productId,
-//     required this.price,
-//     required this.quantity,
-//     required this.warehouseId,
-//     required this.isDefault,
-//     required this.deletedAt,
-//     required this.createdAt,
-//     required this.updatedAt,
-//     required this.productVariationStatusId,
-//     required this.acceptedBy,
-//     required this.productVarientImages,
-//   });
-//
-//   factory ProductVariations.fromJson(Map<String, dynamic> json) =>
-//       _$ProductVariationsFromJson(json);
-// }
+@JsonSerializable()
+class ProductVariations {
+  final int? id;
+  final int? productId;
+  final double? price;
 
-// @JsonSerializable()
-// class ProductVarientImages {
-//   final int id;
-//   final String imagePath;
-//   final int productVarientId;
-//   final String createdAt;
-//   final String updatedAt;
-//
-//   ProductVarientImages({
-//     required this.id,
-//     required this.imagePath,
-//     required this.productVarientId,
-//     required this.createdAt,
-//     required this.updatedAt,
-//   });
-//
-//   factory ProductVarientImages.fromJson(Map<String, dynamic> json) =>
-//       _$ProductVarientImagesFromJson(json);
-//
+  @JsonKey(name: "ProductVarientImages")
+  final List<ProductVarientImages>? productVarientImages;
+
+  ProductVariations({
+    this.id,
+    this.productId,
+    this.price,
+    this.productVarientImages,
+  });
+
+  factory ProductVariations.fromJson(Map<String, dynamic> json) =>
+      _$ProductVariationsFromJson(json);
+}
+
+@JsonSerializable()
+class ProductVarientImages {
+  final int? id;
+  @JsonKey(name: "image_path")
+  final String? imagePath;
+  @JsonKey(name: "product_varient_id")
+  final int? productVarientId;
+
+  ProductVarientImages({
+    this.id,
+    this.imagePath,
+    this.productVarientId,
+  });
+
+  factory ProductVarientImages.fromJson(Map<String, dynamic> json) =>
+      _$ProductVarientImagesFromJson(json);
+}
