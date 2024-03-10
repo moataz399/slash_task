@@ -12,7 +12,9 @@ class _ApiService implements ApiService {
   _ApiService(
     this._dio, {
     this.baseUrl,
-  });
+  }) {
+    baseUrl ??= 'https://slash-backend.onrender.com/';
+  }
 
   final Dio _dio;
 
@@ -32,7 +34,7 @@ class _ApiService implements ApiService {
     )
             .compose(
               _dio.options,
-              'https://slash-backend.onrender.com/product/?limit=20&page=1',
+              'product/?limit=20&page=1',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -42,6 +44,33 @@ class _ApiService implements ApiService {
               baseUrl,
             ))));
     final value = ProductResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<ProductDetailsResponse> getProductDetails(int productId) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ProductDetailsResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'product/${productId}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ProductDetailsResponse.fromJson(_result.data!);
     return value;
   }
 

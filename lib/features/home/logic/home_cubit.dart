@@ -1,7 +1,7 @@
-
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:slash/features/home/data/models/product.dart';
+import 'package:slash/features/home/data/models/product_details_response.dart';
+import 'package:slash/features/home/data/models/product_response.dart';
 import 'package:slash/features/home/data/repos/home_repo.dart';
 
 part 'home_state.dart';
@@ -13,6 +13,8 @@ class HomeCubit extends Cubit<HomeState> {
 
   List<Product> productsList = [];
 
+  //ProductDetailsModel productDetails ;
+
   Future getProducts() async {
     emit(ProductsLoadingState());
 
@@ -23,8 +25,20 @@ class HomeCubit extends Cubit<HomeState> {
       emit(ProductsSuccessState(productList));
     }, failure: (error) {
       print(error.apiErrorModel.message.toString());
-      emit(ProductsFailureState(
-          error: error.apiErrorModel.message ?? "WTF IS THIS SHIT "));
+      emit(ProductsFailureState(error: error.apiErrorModel.message!));
+    });
+  }
+
+  Future getProductDetails(int productId) async {
+    emit(ProductDetailsLoading());
+
+    final response = await homeRepo.getProductDetails(productId);
+
+    response.when(success: (productDetails) {
+      emit(ProductDetailsSuccessState(productDetailsModel: productDetails));
+    }, failure: (error) {
+      print(error.apiErrorModel.message.toString());
+      emit(ProductsFailureState(error: error.apiErrorModel.message!));
     });
   }
 }

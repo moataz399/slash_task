@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'product.g.dart';
+part 'product_response.g.dart';
 
 @JsonSerializable()
 class ProductResponse {
@@ -23,12 +23,15 @@ class Product {
 
   @JsonKey(name: "ProductVariations")
   final List<ProductVariations>? productVariations;
+  @JsonKey(name: "Brands")
+  final Brand? brands;
 
   Product({
     required this.id,
     required this.name,
     required this.description,
     this.productVariations,
+    this.brands,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) =>
@@ -39,6 +42,8 @@ class Product {
 class ProductVariations {
   final int? id;
   final int? productId;
+  final int? quantity;
+  final bool? isDefault;
   final double? price;
 
   @JsonKey(name: "ProductVarientImages")
@@ -48,6 +53,8 @@ class ProductVariations {
     this.id,
     this.productId,
     this.price,
+    this.quantity,
+    this.isDefault,
     this.productVarientImages,
   });
 
@@ -71,4 +78,22 @@ class ProductVarientImages {
 
   factory ProductVarientImages.fromJson(Map<String, dynamic> json) =>
       _$ProductVarientImagesFromJson(json);
+}
+
+@JsonSerializable()
+class Brand {
+  final int? id;
+
+  @JsonKey(name: "brand_name")
+  final String? brandName;
+  @JsonKey(name: "brand_id")
+  final int? brandId;
+
+  Brand({
+    this.id,
+    this.brandName,
+    this.brandId,
+  });
+
+  factory Brand.fromJson(Map<String, dynamic> json) => _$BrandFromJson(json);
 }

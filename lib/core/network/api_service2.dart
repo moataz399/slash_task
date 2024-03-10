@@ -1,5 +1,5 @@
 import 'package:slash/core/helpers/dio_helper.dart';
-import 'package:slash/features/home/data/models/product.dart';
+import 'package:slash/features/home/data/models/product_response.dart';
 
 
  class ApiService2 {
