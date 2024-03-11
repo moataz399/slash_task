@@ -4,10 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:readmore/readmore.dart';
 import 'package:slash/core/helpers/spacing.dart';
+import 'package:slash/core/routing/routes.dart';
 import 'package:slash/core/theming/colors.dart';
 import 'package:slash/core/theming/text_styles.dart';
 import 'package:slash/features/home/data/models/product_response.dart';
+import 'package:slash/features/home/ui/widgets/product_images.dart';
+import 'package:slash/features/home/ui/widgets/product_info_section.dart';
 import 'package:slash/features/home/ui/widgets/product_list_item.dart';
+import 'package:slash/features/home/ui/widgets/recommendation_section.dart';
 
 import '../../logic/home_cubit.dart';
 import '../widgets/product_property.dart';
@@ -25,7 +29,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<HomeCubit>().getProductDetails(widget.productModel.id);
+    getProductDetails();
+  }
+
+  void getProductDetails() async {
+    await context.read<HomeCubit>().getProductDetails(widget.productModel.id);
   }
 
   @override
@@ -46,106 +54,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Align(
-                  alignment: AlignmentDirectional.center,
-                  child: SizedBox(
-                    height: 250.h,
-                    child: ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemCount:
-                          widget.productModel.productVariations?.length ?? 0,
-                      itemBuilder: (context, index) {
-                        final variation =
-                            widget.productModel.productVariations![index];
-
-                        return SizedBox(
-                          height: 250.h,
-                          child: ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            itemCount:
-                                variation.productVarientImages?.length ?? 0,
-                            itemBuilder: (context, imgIndex) {
-                              final imagePath = variation
-                                  .productVarientImages![imgIndex].imagePath;
-
-                              return Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 5.w),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(16.r),
-                                  child: CachedNetworkImage(
-                                    width: 200.w,
-                                    imageUrl: imagePath ?? "",
-                                    placeholder: (context, url) => const Center(
-                                      child: CircularProgressIndicator(
-                                        color: AppColors.mainGreen,
-                                      ),
-                                    ),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(Icons.error),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                    // ...
-
-                    // ...
-                  ),
+                ProductImagesSection(
+                  productModel: widget.productModel,
                 ),
-
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    verticalSpace(30),
-                    Text(
-                      widget.productModel.name,
-                      style: TextStyles.font14BlackSemiBold,
-                    ),
-                    verticalSpace(8),
-                    Text(
-                        "EGP${widget.productModel.productVariations?[0].price.toString()}",
-                        style: TextStyles.font16BlackSemiBold),
-                    verticalSpace(8),
-                    Text(
-                      "Description:",
-                      style: TextStyles.font14BlackMedium,
-                    ),
-                    verticalSpace(8),
-                    ReadMoreText(
-                      widget.productModel.description,
-                      trimLines: 5,
-                      style: TextStyles.font14BlackMedium,
-                      colorClickableText: Colors.grey,
-                      trimMode: TrimMode.Line,
-                      trimCollapsedText: 'More',
-                      trimExpandedText: 'Less',
-                      lessStyle: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.grey),
-                      moreStyle: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.grey),
-                    ),
-                    verticalSpace(16),
-                    BlocBuilder<HomeCubit, HomeState>(
-                        builder: (context, state) {
+                verticalSpace(30),
+                ProductInfoSection(
+                  productModel: widget.productModel,
+                ),
+                verticalSpace(16),
+                BlocBuilder<HomeCubit, HomeState>(
+                    buildWhen: (previous, current) =>
+                        current is ProductDetailsLoading ||
+                        current is ProductDetailsSuccessState ||
+                        current is ProductDetailsFailureState,
+                    builder: (context, state) {
                       if (state is ProductDetailsSuccessState) {
                         return SizedBox(
-                          height: 170.h,
                           child: ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: state.productDetailsModel
                                 .availableProperties?.length,
@@ -160,31 +88,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             },
                           ),
                         );
+                      } else if (state is ProductDetailsLoading) {
+                        return CircularProgressIndicator(
+                          color: Colors.black,
+                        );
+                      } else if (state is ProductsFailureState) {
+                        return Center(
+                          child: Text(state.error),
+                        );
                       } else {
                         return Container();
                       }
                     }),
-                    Text(
-                      "You Might Also Like:",
-                      style: TextStyles.font14BlackSemiBold,
-                    ),
-                  ],
+                verticalSpace(8.h),
+                Text(
+                  "You Might Also Like:",
+                  style: TextStyles.font14BlackSemiBold,
                 ),
-                verticalSpace(18.h),
-                SizedBox(
-                  height: 250.h,
-                  child: ListView.builder(
-                    clipBehavior: Clip.none,
-                    scrollDirection: Axis.horizontal,
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: context.read<HomeCubit>().productsList.length,
-                    itemBuilder: (context, index) => ProductListItem(
-                        isDetails: true,
-                        sameProductId: widget.productModel.id,
-                        productModel:
-                            context.read<HomeCubit>().productsList[index]),
-                  ),
+                verticalSpace(16.h),
+                RecommendationSection(
+                  productModel: widget.productModel,
                 ),
                 verticalSpace(30.h)
               ],
@@ -195,4 +118,3 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 }
-

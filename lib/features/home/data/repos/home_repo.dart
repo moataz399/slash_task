@@ -16,8 +16,6 @@ class HomeRepo {
       List<Product> data = response.data;
       return ApiResult.success(data);
     } catch (error) {
-      print(error);
-      print(error.toString());
       return ApiResult.failure(ErrorHandler.handle(error));
     }
   }
@@ -29,8 +27,7 @@ class HomeRepo {
       final ProductDetailsModel data = response.data;
       return ApiResult.success(data);
     } catch (error) {
-      print(error);
-      print(error.toString());
+
       return ApiResult.failure(ErrorHandler.handle(error));
     }
   }

@@ -7,25 +7,27 @@ import 'package:slash/core/theming/text_styles.dart';
 import 'package:slash/features/home/logic/home_cubit.dart';
 import 'package:slash/features/home/ui/widgets/product_list_item.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({
     super.key,
   });
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void didPopNext() {
+    // This method will be called when ProductDetailsScreen is popped and HomeScreen is re-entered.
+    // You can trigger a refresh of data here.
+    context.read<HomeCubit>().getProducts();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          InkWell(
-            onTap: () {
-              context.read<HomeCubit>().getProducts();
-            },
-            child: const Center(
-              child: Text("Load Data"),
-            ),
-          ),
-        ],
         automaticallyImplyLeading: false,
         title: Text(
           "Slash.",
@@ -42,27 +44,44 @@ class HomeScreen extends StatelessWidget {
             children: [
               verticalSpace(16.h),
               BlocBuilder<HomeCubit, HomeState>(
+                buildWhen: (previous, current) =>
+                    current is ProductsLoadingState ||
+                    current is ProductsSuccessState ||
+                    current is ProductsFailureState,
                 builder: (context, state) {
-                  return (state is ProductsSuccessState)
-                      ? Expanded(
-                          child: MasonryGridView.builder(
-                              crossAxisSpacing: 16.w,
-                              mainAxisSpacing: 16.h,
-                              physics: const BouncingScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount:
-                                  context.read<HomeCubit>().productsList.length,
-                              gridDelegate:
-                                  const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2),
-                              itemBuilder: (context, index) => ProductListItem(
-                                    isDetails: false,
-                                    productModel: context
-                                        .read<HomeCubit>()
-                                        .productsList[index],
-                                  )),
-                        )
-                      : const Center(child: CircularProgressIndicator());
+                  if (state is ProductsLoadingState) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.black,
+                      ),
+                    );
+                  } else if (state is ProductsSuccessState) {
+                    return Expanded(
+                      child: MasonryGridView.builder(
+                          crossAxisSpacing: 16.w,
+                          mainAxisSpacing: 16.h,
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount:
+                              context.read<HomeCubit>().productsList.length,
+                          gridDelegate:
+                              const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2),
+                          itemBuilder: (context, index) => ProductListItem(
+                                isDetails: false,
+                                productModel: context
+                                    .read<HomeCubit>()
+                                    .productsList[index],
+                              ),
+                      ),
+                    );
+                  } else if (state is ProductsFailureState) {
+                    return Center(
+                      child: Text(state.error),
+                    );
+                  } else {
+                    return const Text("opps something went wrong ");
+                  }
                 },
               )
             ],

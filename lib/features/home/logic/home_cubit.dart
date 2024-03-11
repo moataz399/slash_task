@@ -12,8 +12,7 @@ class HomeCubit extends Cubit<HomeState> {
   final HomeRepo homeRepo;
 
   List<Product> productsList = [];
-
-  //ProductDetailsModel productDetails ;
+  late ProductDetailsModel productDetailsModel;
 
   Future getProducts() async {
     emit(ProductsLoadingState());
@@ -35,10 +34,15 @@ class HomeCubit extends Cubit<HomeState> {
     final response = await homeRepo.getProductDetails(productId);
 
     response.when(success: (productDetails) {
+      productDetailsModel = productDetails;
       emit(ProductDetailsSuccessState(productDetailsModel: productDetails));
     }, failure: (error) {
       print(error.apiErrorModel.message.toString());
       emit(ProductsFailureState(error: error.apiErrorModel.message!));
     });
+  }
+
+  void clearProductDetails() {
+    emit(HomeInitial());
   }
 }
