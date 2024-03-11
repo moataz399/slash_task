@@ -23,7 +23,6 @@ class HomeCubit extends Cubit<HomeState> {
       productsList.addAll(productList);
       emit(ProductsSuccessState(productList));
     }, failure: (error) {
-      print(error.apiErrorModel.message.toString());
       emit(ProductsFailureState(error: error.apiErrorModel.message!));
     });
   }
@@ -37,12 +36,8 @@ class HomeCubit extends Cubit<HomeState> {
       productDetailsModel = productDetails;
       emit(ProductDetailsSuccessState(productDetailsModel: productDetails));
     }, failure: (error) {
-      print(error.apiErrorModel.message.toString());
       emit(ProductsFailureState(error: error.apiErrorModel.message!));
     });
   }
 
-  void clearProductDetails() {
-    emit(HomeInitial());
-  }
 }

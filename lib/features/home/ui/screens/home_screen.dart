@@ -17,12 +17,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void didPopNext() {
-    // This method will be called when ProductDetailsScreen is popped and HomeScreen is re-entered.
-    // You can trigger a refresh of data here.
-    context.read<HomeCubit>().getProducts();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Text(state.error),
                     );
                   } else {
-                    return const Text("opps something went wrong ");
+                    return const Text("ops something went wrong ");
                   }
                 },
               )

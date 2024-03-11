@@ -8,6 +8,7 @@ import 'package:slash/core/routing/routes.dart';
 import 'package:slash/core/theming/colors.dart';
 import 'package:slash/core/theming/text_styles.dart';
 import 'package:slash/features/home/data/models/product_response.dart';
+import 'package:slash/features/home/ui/widgets/product_available_properties.dart';
 import 'package:slash/features/home/ui/widgets/product_images.dart';
 import 'package:slash/features/home/ui/widgets/product_info_section.dart';
 import 'package:slash/features/home/ui/widgets/product_list_item.dart';
@@ -64,43 +65,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   productModel: widget.productModel,
                 ),
                 verticalSpace(16),
-                BlocBuilder<HomeCubit, HomeState>(
-                    buildWhen: (previous, current) =>
-                        current is ProductDetailsLoading ||
-                        current is ProductDetailsSuccessState ||
-                        current is ProductDetailsFailureState,
-                    builder: (context, state) {
-                      if (state is ProductDetailsSuccessState) {
-                        return SizedBox(
-                          child: ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: state.productDetailsModel
-                                .availableProperties?.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: EdgeInsets.symmetric(vertical: 4.0.h),
-                                child: ProductAvailableProperty(
-                                  model: state.productDetailsModel
-                                      .availableProperties![index],
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      } else if (state is ProductDetailsLoading) {
-                        return CircularProgressIndicator(
-                          color: Colors.black,
-                        );
-                      } else if (state is ProductsFailureState) {
-                        return Center(
-                          child: Text(state.error),
-                        );
-                      } else {
-                        return Container();
-                      }
-                    }),
-                verticalSpace(8.h),
+                ProductAvailableProperties(),
+                verticalSpace(16),
                 Text(
                   "You Might Also Like:",
                   style: TextStyles.font14BlackSemiBold,

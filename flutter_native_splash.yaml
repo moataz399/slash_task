@@ -1,0 +1,7 @@
+flutter_native_splash:
+
+
+  color: "#ffffff"
+  image: assets/images/slash_logo.png
+
+  android_12:
