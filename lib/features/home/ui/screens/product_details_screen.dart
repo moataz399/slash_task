@@ -37,6 +37,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     await context.read<HomeCubit>().getProductDetails(widget.productModel.id);
   }
 
+  int selected = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,39 +49,64 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           style: TextStyles.font16BlackSemiBold,
         ),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 16.w,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                ProductImagesSection(
-                  productModel: widget.productModel,
+      body: BlocBuilder<HomeCubit, HomeState>(
+        buildWhen: (previous, current) =>
+            current is ProductDetailsLoading ||
+            current is ProductDetailsSuccessState ||
+            current is ProductDetailsFailureState,
+        builder: (context, state) {
+          if (state is ProductDetailsLoading) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is ProductsFailureState) {
+            return Center(
+              child: Text(
+                state.error,
+                style: TextStyles.font16BlackSemiBold,
+              ),
+            );
+          } else if (state is ProductDetailsSuccessState) {
+            return SafeArea(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.w,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      ProductImagesSection(
+                        productModel: state.productDetailsModel,
+                      ),
+                      verticalSpace(16),
+                      // ProductProp(
+                      //   productDetailsModel: state.productDetailsModel,
+                      // ),
+                      ProductInfoSection(
+                        productModel: state.productDetailsModel,
+                      ),
+                      ProductAvailableProperties(productDetailsModel: state.productDetailsModel,),
+                      verticalSpace(16),
+                      Text(
+                        "You Might Also Like:",
+                        style: TextStyles.font14BlackSemiBold,
+                      ),
+                      verticalSpace(16.h),
+                      RecommendationSection(
+                        productModel: widget.productModel,
+                      ),
+                      verticalSpace(30.h)
+                    ],
+                  ),
                 ),
-                verticalSpace(16),
-                ProductInfoSection(
-                  productModel: widget.productModel,
-                ),
-
-                ProductAvailableProperties(),
-                verticalSpace(16),
-                Text(
-                  "You Might Also Like:",
-                  style: TextStyles.font14BlackSemiBold,
-                ),
-                verticalSpace(16.h),
-                RecommendationSection(
-                  productModel: widget.productModel,
-                ),
-                verticalSpace(30.h)
-              ],
-            ),
-          ),
-        ),
+              ),
+            );
+          } else {
+            return Container();
+          }
+        },
       ),
     );
   }
