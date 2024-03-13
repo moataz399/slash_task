@@ -26,8 +26,8 @@ class ProductAvailableProperties extends StatelessWidget {
                   return Padding(
                     padding: EdgeInsets.symmetric(vertical: 4.0.h),
                     child: ProductAvailableProperty(
-                      model:
-                          state.productDetailsModel.availableProperties![index],
+                      model: state
+                          .productDetailsModel.availableProperties![index],
                     ),
                   );
                 },

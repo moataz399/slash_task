@@ -60,11 +60,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ProductImagesSection(
                   productModel: widget.productModel,
                 ),
-                verticalSpace(30),
+                verticalSpace(16),
                 ProductInfoSection(
                   productModel: widget.productModel,
                 ),
-                verticalSpace(16),
+
                 ProductAvailableProperties(),
                 verticalSpace(16),
                 Text(

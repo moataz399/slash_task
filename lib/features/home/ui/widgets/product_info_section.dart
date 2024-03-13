@@ -17,30 +17,30 @@ class ProductInfoSection extends StatelessWidget {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               productModel.name,
-              style: TextStyles.font16BlackSemiBold,
+              style: TextStyles.font20BlackBold,
             ),
-            Text(
-              productModel.brands?.brandName ?? "",
-              style: TextStyles.font16BlackMedium,
-            ),
+            Text("EGP ${productModel.productVariations?[0].price.toString()}",
+                style: TextStyles.font14GreenBold),
           ],
         ),
-        verticalSpace(8),
-        Text("EGP ${productModel.productVariations?[0].price.toString()}",
-            style: TextStyles.font16BlackSemiBold),
-        verticalSpace(8),
+        Text(
+          productModel.brands?.brandName ?? "",
+          style: TextStyles.font14BlackRegular,
+        ),
+        verticalSpace(16),
         Text(
           "Description:",
-          style: TextStyles.font14BlackSemiBold,
+          style: TextStyles.font16BlackSemiBold,
         ),
         verticalSpace(8),
         ReadMoreText(
           productModel.description,
           trimLines: 5,
-          style: TextStyles.font14BlackMedium,
+          style: TextStyles.font14BlackRegular,
           colorClickableText: Colors.grey,
           trimMode: TrimMode.Line,
           trimCollapsedText: 'More',
