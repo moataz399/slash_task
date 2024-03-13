@@ -49,7 +49,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         builder: (context, state) {
           if (state is ProductDetailsLoading) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                color: Colors.black,
+              ),
             );
           } else if (state is ProductsFailureState) {
             return Center(
