@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:slash/core/theming/text_styles.dart';
 import 'package:slash/features/home/data/models/product_details_response.dart';
-import 'package:slash/features/home/logic/home_cubit.dart';
 import 'package:slash/features/home/ui/widgets/product_property.dart';
 
 class ProductAvailableProperties extends StatefulWidget {
@@ -47,7 +45,7 @@ class _ProductAvailablePropertiesState
               return Padding(
                 padding: EdgeInsets.symmetric(vertical: 4.0.h),
                 child: ProductAvailableProperty(
-                  model: widget.productDetailsModel.availableProperties![index],
+                  productDetailsModel: widget.productDetailsModel
                 ),
               );
             },

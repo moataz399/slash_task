@@ -1,17 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:readmore/readmore.dart';
 import 'package:slash/core/helpers/spacing.dart';
-import 'package:slash/core/routing/routes.dart';
-import 'package:slash/core/theming/colors.dart';
 import 'package:slash/core/theming/text_styles.dart';
 import 'package:slash/features/home/data/models/product_response.dart';
-import 'package:slash/features/home/ui/widgets/product_available_properties.dart';
-import 'package:slash/features/home/ui/widgets/product_images.dart';
+import 'package:slash/features/home/ui/widgets/product_images_section.dart';
 import 'package:slash/features/home/ui/widgets/product_info_section.dart';
-import 'package:slash/features/home/ui/widgets/product_list_item.dart';
 import 'package:slash/features/home/ui/widgets/recommendation_section.dart';
 
 import '../../logic/home_cubit.dart';
@@ -87,7 +81,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ProductInfoSection(
                         productModel: state.productDetailsModel,
                       ),
-                      ProductAvailableProperties(productDetailsModel: state.productDetailsModel,),
+                      ProductAvailableProperty(
+                        productDetailsModel:state.productDetailsModel ,
+                      ),
                       verticalSpace(16),
                       Text(
                         "You Might Also Like:",

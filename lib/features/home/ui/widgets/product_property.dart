@@ -8,10 +8,11 @@ import 'package:slash/features/home/data/models/product_details_response.dart';
 class ProductAvailableProperty extends StatefulWidget {
   const ProductAvailableProperty({
     super.key,
-    required this.model,
+    required this.productDetailsModel,
   });
 
-  final AvailableProperties model;
+  // final AvailableProperties model;
+  final ProductDetailsModel productDetailsModel;
 
   @override
   State<ProductAvailableProperty> createState() =>
@@ -19,18 +20,20 @@ class ProductAvailableProperty extends StatefulWidget {
 }
 
 class _ProductAvailablePropertyState extends State<ProductAvailableProperty> {
-  late List<bool> isSelectedList;
-  late List<bool> isSelectedListColor;
+  List<bool> isSelectedList = [];
+
+  List<bool> isSelectedListColor = [];
+
   int selectedIndex = 0;
 
   @override
   void initState() {
     super.initState();
 
-    isSelectedList =
-        List.generate(widget.model.values.length, (index) => false);
-    isSelectedListColor =
-        List.generate(widget.model.values.length, (index) => false);
+    // isSelectedList =
+    //     List.generate(widget.model.values.length, (index) => false);
+    // isSelectedListColor =
+    //     List.generate(widget.model.values.length, (index) => false);
   }
 
   Color colorFun(String color) {
@@ -48,86 +51,122 @@ class _ProductAvailablePropertyState extends State<ProductAvailableProperty> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        verticalSpace(16),
+
+
+        // ProductImagesSection(productModel: ),
+
+
+
+
+
+
         Text(
-          "Available ${widget.model.property}:",
-          style: TextStyles.font16BlackSemiBold,
+          "EGP${widget.productDetailsModel.variations![selectedIndex].price.toString()}",
+          style: TextStyles.font14GreenBold,
+          softWrap: true,
         ),
-        verticalSpace((8)),
-        if (widget.model.property == "Color")
-          SizedBox(
-            height: 40.h,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-              child: Container(
-                width: 25.w,
-                height: 25.h,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.grey),
-                  color: colorFun(widget.model.values[selectedIndex].value),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF1B1956).withOpacity(.04),
-                      spreadRadius: 0,
-                      blurRadius: 18,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          )
-        else
-          SizedBox(
-            height: 40.h,
-            child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(),
-                itemCount: widget.model.values.length,
-                itemBuilder: (context, index) {
-                  if (widget.model.values.length == 1) {
-                    isSelectedList[index] = true;
-                  }
-                  return InkWell(
-                    onTap: () {
-                      setState(() {
-                        selectedIndex = index;
-                        //  Toggle the selected state for the tapped item
-                        for (int i = 0; i < isSelectedList.length; i++) {
-                          isSelectedList[i] = (i == index);
-                          print(widget.model.values[index].value);
-                        }
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 8.h, horizontal: 16.0.w),
-                        decoration: isSelectedList[index]
-                            ? BoxDecoration(
-                                borderRadius: BorderRadius.circular(16.r),
-                                color: AppColors.mainGreen)
-                            : BoxDecoration(
-                                borderRadius: BorderRadius.circular(16.r),
-                                border: Border.all(color: Colors.grey),
+        SizedBox(
+          child: ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: widget.productDetailsModel.availableProperties?.length,
+            itemBuilder: (context, index) {
+              var model =
+                  widget.productDetailsModel.availableProperties![index];
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  verticalSpace(16),
+                  Text(
+                    "Available ${model.property}:",
+                    style: TextStyles.font16BlackSemiBold,
+                  ),
+                  verticalSpace((8)),
+                  if (model.property == "Color")
+                    SizedBox(
+                      height: 40.h,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: Container(
+                          width: 25.w,
+                          height: 25.h,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.grey),
+                            color: colorFun(model.values[selectedIndex].value),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF1B1956).withOpacity(.04),
+                                spreadRadius: 0,
+                                blurRadius: 18,
+                                offset: const Offset(0, 4),
                               ),
-                        child: Center(
-                          child: Text(
-                            widget.model.values[index].value,
-                            style: isSelectedList[index]
-                                ? TextStyles.font15WhiteSemiBold
-                                : TextStyles.font14GreyMedium,
-                            softWrap: true,
+                            ],
                           ),
                         ),
                       ),
-                    ),
-                  );
-                }),
-          )
+                    )
+                  else
+                    SizedBox(
+                      height: 40.h,
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: model.values.length,
+                          itemBuilder: (context, index) {
+                            // if (model.values.length == 1) {
+                            //   isSelectedList[index] = true;
+                            // }
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selectedIndex = index;
+                                  //  Toggle the selected state for the tapped item
+                                  // for (int i = 0;
+                                  //     i < isSelectedList.length;
+                                  //     i++) {
+                                  //   isSelectedList[i] = (i == index);
+                                  //   print(model.values[index].value);
+                                  // }
+                                });
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 8.h, horizontal: 16.0.w),
+                                  decoration: selectedIndex == index
+                                      ? BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(16.r),
+                                          color: AppColors.mainGreen)
+                                      : BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(16.r),
+                                          border:
+                                              Border.all(color: Colors.grey),
+                                        ),
+                                  child: Center(
+                                    child: Text(
+                                      model.values[index].value,
+                                      style: selectedIndex == index
+                                          ? TextStyles.font15WhiteSemiBold
+                                          : TextStyles.font14GreyMedium,
+                                      softWrap: true,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                    )
+                ],
+              );
+            },
+          ),
+        ),
       ],
     );
   }
