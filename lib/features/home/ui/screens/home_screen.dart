@@ -17,8 +17,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,21 +51,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   } else if (state is ProductsSuccessState) {
                     return Expanded(
                       child: MasonryGridView.builder(
-                          crossAxisSpacing: 16.w,
-                          mainAxisSpacing: 16.h,
-                          physics: const BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount:
-                              context.read<HomeCubit>().productsList.length,
-                          gridDelegate:
-                              const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2),
-                          itemBuilder: (context, index) => ProductListItem(
-                                isDetails: false,
-                                productModel: context
-                                    .read<HomeCubit>()
-                                    .productsList[index],
-                              ),
+                        crossAxisSpacing: 16.w,
+                        mainAxisSpacing: 16.h,
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount:
+                            context.read<HomeCubit>().productsList.length,
+                        gridDelegate:
+                            const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2),
+                        itemBuilder: (context, index) => ProductListItem(
+                          isDetails: false,
+                          productModel:
+                              context.read<HomeCubit>().productsList[index],
+                        ),
                       ),
                     );
                   } else if (state is ProductsFailureState) {

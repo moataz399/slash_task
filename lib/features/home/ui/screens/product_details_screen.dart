@@ -9,7 +9,7 @@ import 'package:slash/features/home/ui/widgets/product_info_section.dart';
 import 'package:slash/features/home/ui/widgets/recommendation_section.dart';
 
 import '../../logic/home_cubit.dart';
-import '../widgets/product_property.dart';
+import '../widgets/product_available_property.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   const ProductDetailsScreen({super.key, required this.productModel});
@@ -31,8 +31,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     await context.read<HomeCubit>().getProductDetails(widget.productModel.id);
   }
 
-  int selected = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +48,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             current is ProductDetailsFailureState,
         builder: (context, state) {
           if (state is ProductDetailsLoading) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else if (state is ProductsFailureState) {
@@ -71,18 +69,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      ProductImagesSection(
-                        productModel: state.productDetailsModel,
-                      ),
-                      verticalSpace(16),
-                      // ProductProp(
-                      //   productDetailsModel: state.productDetailsModel,
-                      // ),
-                      ProductInfoSection(
-                        productModel: state.productDetailsModel,
-                      ),
                       ProductAvailableProperty(
-                        productDetailsModel:state.productDetailsModel ,
+                        productDetailsModel: state.productDetailsModel,
+                        productModel: widget.productModel,
                       ),
                       verticalSpace(16),
                       Text(

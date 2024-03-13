@@ -3,11 +3,18 @@ import 'package:readmore/readmore.dart';
 import 'package:slash/core/helpers/spacing.dart';
 import 'package:slash/core/theming/text_styles.dart';
 import 'package:slash/features/home/data/models/product_details_response.dart';
+import 'package:slash/features/home/data/models/product_response.dart';
 
 class ProductInfoSection extends StatelessWidget {
-  const ProductInfoSection({super.key, required this.productModel});
+  const ProductInfoSection(
+      {super.key,
+      required this.productDetailsModel,
+      required this.variation,
+      required this.productModel});
 
-  final ProductDetailsModel productModel;
+  final ProductDetailsModel productDetailsModel;
+  final Product productModel;
+  final Variations variation;
 
   @override
   Widget build(BuildContext context) {
@@ -22,17 +29,17 @@ class ProductInfoSection extends StatelessWidget {
               productModel.name,
               style: TextStyles.font20BlackBold,
             ),
-            // Text(
-            //   "EGP ${productModel.variations?[0].price.toString()}",
-            //   style: TextStyles.font14GreenBold,
-            //   softWrap: true,
-            // ),
+            Text(
+              "EGP${variation.price.toString()}",
+              style: TextStyles.font14GreenBold,
+              softWrap: true,
+            ),
           ],
         ),
-        // Text(
-        //   productModel.brands?.brandName ?? "",
-        //   style: TextStyles.font14BlackRegular,
-        // ),
+        Text(
+          productModel.brands?.brandName ?? "",
+          style: TextStyles.font14BlackRegular,
+        ),
         verticalSpace(16),
         Text(
           "Description:",
