@@ -34,7 +34,7 @@ class _ApiService implements ApiService {
     )
             .compose(
               _dio.options,
-              'product/?limit=20&page=1',
+              'product/?limit=40&page=1',
               queryParameters: queryParameters,
               data: _data,
             )

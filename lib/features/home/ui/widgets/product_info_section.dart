@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:readmore/readmore.dart';
 import 'package:slash/core/helpers/spacing.dart';
 import 'package:slash/core/theming/text_styles.dart';
@@ -25,9 +26,15 @@ class ProductInfoSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              productModel.name,
-              style: TextStyles.font20BlackBold,
+            SizedBox(
+              width: 250.w,
+              child: Text(
+                productModel.name,
+                style: TextStyles.font20BlackBold,
+                maxLines: 2,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
             Text(
               "EGP${variation.price.toString()}",
